@@ -93,7 +93,50 @@
     }
   </style>
 </head>
-<body>
+<body class="light-mode">
+  <script>
+    function toggleMode() {
+      const body = document.body;
+      body.classList.toggle('dark-mode');
+      body.classList.toggle('light-mode');
+      const logo = document.getElementById('euroflex-logo');
+      logo.src = body.classList.contains('dark-mode') ? 'euroflex-logo-dark.png' : 'euroflex-vapour-logo.jpg';
+    }
+  </script>
+  <style>
+    .mode-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #007aff;
+      border: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .dark-mode body,
+    .dark-mode .player-wrapper {
+      background-color: #1c1c1e !important;
+      color: white !important;
+    }
+    .light-mode body,
+    .light-mode .player-wrapper {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    .light-mode .controls {
+      background-color: #f4f4f4 !important;
+    }
+    .dark-mode .controls {
+      background-color: #2c2c2e !important;
+    }
+  </style>
+  <button class="mode-toggle" onclick="toggleMode()">Toggle Mode</button>
+
   <div class="player-wrapper">
     <div class="mac-bar">
       <div class="red"></div>
@@ -101,13 +144,13 @@
       <div class="green"></div>
     </div>
     <iframe
-      src="https://player.vimeo.com/video/1041615205?autoplay=1&loop=1&muted=1&background=0"
+      src="https://player.vimeo.com/video/1041615205?autoplay=1&loop=1&muted=1&background=0&title=0&byline=0&portrait=0"
       title="Euroflex Vapour Pro Video Ad"
       allow="autoplay; fullscreen; picture-in-picture"
       allowfullscreen
     ></iframe>
     <div class="controls">
-      <img src="euroflex-vapour-logo.jpg" alt="Euroflex Vapour Logo" />
+      <img id="euroflex-logo" src="euroflex-vapour-logo.jpg" alt="Euroflex Vapour Logo" />
       <div class="cta-group">
         <button class="cta-button cta-talk" title='Ask this ad anything about the Euroflex Vapour Steam Cleaner such as, "why is this better than steam cleaners that are half the price?"'>
           Talk to this Ad <span class="fa fa-microphone"></span>
