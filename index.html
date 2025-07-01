@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,12 +5,10 @@
   <title>Euroflex Vapour Pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="favicon.png" />
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-WafLtKyPkqAK7m09k++CJKhqZAvD9IX+O4UxwZuRre6IaeFXEvcNMPmQdXFTYkiRzDZUN0JvoCu/qJUkC+zKtw=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
+  
+  <!-- Fixed Font Awesome CDN without integrity hash that might cause issues -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -88,6 +85,18 @@
     .cta-shop {
       background-color: #007aff;
     }
+
+    /* CSS Fallback Icons (emoji backup if Font Awesome fails) */
+    .icon-fallback {
+      font-style: normal;
+      display: none;
+    }
+    
+    /* Show emoji fallback only if Font Awesome icon is not working */
+    .cta-button i:empty + .icon-fallback,
+    .cta-button i:not([class*="fa"]) + .icon-fallback {
+      display: inline;
+    }
   </style>
 </head>
 <body class="light-mode">
@@ -107,13 +116,43 @@
       <img src="euroflex-vapour-logo.jpg" alt="Euroflex Vapour Logo" />
       <div class="cta-group">
         <button class="cta-button cta-talk" title='Ask this ad anything about the Euroflex Vapour Steam Cleaner such as, "why is this better than steam cleaners that are half the price?"'>
-          <i class="fas fa-microphone"></i><span style="margin-left: 8px;">Talk to this Ad</span>
+          <i class="fas fa-microphone"></i>
+          <span class="icon-fallback">🎤</span>
+          <span>Talk to this Ad</span>
         </button>
         <button class="cta-button cta-shop" onclick="window.open('https://your-product-page.com', '_blank')">
-          <i class="fas fa-shopping-cart"></i><span style="margin-left: 8px;">Shop Now</span>
+          <i class="fas fa-shopping-cart"></i>
+          <span class="icon-fallback">🛒</span>
+          <span>Shop Now</span>
         </button>
       </div>
     </div>
   </div>
+
+  <script>
+    // Simple fallback check - if Font Awesome doesn't load, show emoji icons
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const testIcon = document.createElement('i');
+        testIcon.className = 'fas fa-home';
+        testIcon.style.position = 'absolute';
+        testIcon.style.visibility = 'hidden';
+        document.body.appendChild(testIcon);
+        
+        const hasIcon = window.getComputedStyle(testIcon, ':before').content !== 'none';
+        document.body.removeChild(testIcon);
+        
+        if (!hasIcon) {
+          // Font Awesome failed, show emoji fallbacks
+          document.querySelectorAll('.icon-fallback').forEach(el => {
+            el.style.display = 'inline';
+          });
+          document.querySelectorAll('.fas').forEach(el => {
+            el.style.display = 'none';
+          });
+        }
+      }, 500);
+    });
+  </script>
 </body>
 </html>
