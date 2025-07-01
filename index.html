@@ -19,6 +19,84 @@
       justify-content: center;
       color: white;
     }
+
+    /* Login Screen Styles */
+    .login-container {
+      max-width: 400px;
+      background-color: #2c2c2e;
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .login-container h1 {
+      margin-bottom: 30px;
+      color: #ffffff;
+      font-size: 2em;
+      font-weight: 600;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .login-input {
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background-color: #3a3a3c;
+      color: white;
+      font-size: 16px;
+      outline: none;
+      transition: background-color 0.2s ease;
+    }
+
+    .login-input:focus {
+      background-color: #48484a;
+    }
+
+    .login-input::placeholder {
+      color: #8e8e93;
+    }
+
+    .login-button {
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background-color: #007aff;
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .login-button:hover {
+      background-color: #0056cc;
+      transform: translateY(-2px);
+    }
+
+    .login-button:active {
+      transform: translateY(0);
+    }
+
+    .error-message {
+      color: #ff453a;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .demo-content {
+      display: none;
+    }
+
+    .demo-content.authenticated {
+      display: block;
+    }
     .player-wrapper {
       max-width: 720px;
       background-color: #1c1c1e;
@@ -100,38 +178,107 @@
   </style>
 </head>
 <body class="light-mode">
-  <div class="player-wrapper">
-    <div class="mac-bar">
-      <div class="red"></div>
-      <div class="yellow"></div>
-      <div class="green"></div>
-    </div>
-    <iframe
-      src="https://player.vimeo.com/video/1041615205?autoplay=1&loop=1&muted=1&background=0&title=0&byline=0&portrait=0"
-      title="Euroflex Vapour Pro Video Ad"
-      allow="autoplay; fullscreen; picture-in-picture"
-      allowfullscreen
-    ></iframe>
-    <div class="controls">
-      <img src="euroflex-vapour-logo.jpg" alt="Euroflex Vapour Logo" />
-      <div class="cta-group">
-        <button class="cta-button cta-talk" title='Ask this ad anything about the Euroflex Vapour Steam Cleaner such as, "why is this better than steam cleaners that are half the price?"'>
-          <i class="fas fa-microphone"></i>
-          <span class="icon-fallback">🎤</span>
-          <span>Talk to this Ad</span>
-        </button>
-        <button class="cta-button cta-shop" onclick="window.open('https://your-product-page.com', '_blank')">
-          <i class="fas fa-shopping-cart"></i>
-          <span class="icon-fallback">🛒</span>
-          <span>Shop Now</span>
-        </button>
+  <!-- Login Screen -->
+  <div class="login-container" id="loginContainer">
+    <h1><i class="fas fa-lock"></i> Demo Access</h1>
+    <form class="login-form" onsubmit="checkPassword(event)">
+      <input 
+        type="password" 
+        class="login-input" 
+        id="passwordInput"
+        placeholder="Enter password to view demo"
+        required
+      />
+      <button type="submit" class="login-button">
+        <i class="fas fa-sign-in-alt"></i>
+        <span class="icon-fallback">🔓</span>
+        Access Demo
+      </button>
+      <div class="error-message" id="errorMessage">
+        Incorrect password. Please try again.
+      </div>
+    </form>
+  </div>
+
+  <!-- Demo Content (hidden initially) -->
+  <div class="demo-content" id="demoContent">
+    <div class="player-wrapper">
+      <div class="mac-bar">
+        <div class="red"></div>
+        <div class="yellow"></div>
+        <div class="green"></div>
+      </div>
+      <iframe
+        src="https://player.vimeo.com/video/1041615205?autoplay=1&loop=1&muted=1&background=0&title=0&byline=0&portrait=0"
+        title="Euroflex Vapour Pro Video Ad"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+      <div class="controls">
+        <img src="euroflex-vapour-logo.jpg" alt="Euroflex Vapour Logo" />
+        <div class="cta-group">
+          <button class="cta-button cta-talk" title='Ask this ad anything about the Euroflex Vapour Steam Cleaner such as, "why is this better than steam cleaners that are half the price?"'>
+            <i class="fas fa-microphone"></i>
+            <span class="icon-fallback">🎤</span>
+            <span>Talk to this Ad</span>
+          </button>
+          <button class="cta-button cta-shop" onclick="window.open('https://your-product-page.com', '_blank')">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="icon-fallback">🛒</span>
+            <span>Shop Now</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
+    // Password for demo access
+    const DEMO_PASSWORD = "euroflex2024";
+    
+    // Check password function
+    function checkPassword(event) {
+      event.preventDefault();
+      
+      const passwordInput = document.getElementById('passwordInput');
+      const errorMessage = document.getElementById('errorMessage');
+      const loginContainer = document.getElementById('loginContainer');
+      const demoContent = document.getElementById('demoContent');
+      
+      if (passwordInput.value === DEMO_PASSWORD) {
+        // Correct password - show demo
+        loginContainer.style.display = 'none';
+        demoContent.classList.add('authenticated');
+        
+        // Store authentication in sessionStorage so user doesn't need to login again during session
+        sessionStorage.setItem('demoAuthenticated', 'true');
+      } else {
+        // Wrong password - show error
+        errorMessage.style.display = 'block';
+        passwordInput.value = '';
+        passwordInput.focus();
+        
+        // Shake animation for error
+        passwordInput.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+          passwordInput.style.animation = '';
+        }, 500);
+      }
+    }
+    
+    // Check if user is already authenticated
+    function checkAuthentication() {
+      if (sessionStorage.getItem('demoAuthenticated') === 'true') {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('demoContent').classList.add('authenticated');
+      }
+    }
+
     // Simple fallback check - if Font Awesome doesn't load, show emoji icons
     window.addEventListener('load', function() {
+      // Check authentication first
+      checkAuthentication();
+      
       setTimeout(function() {
         const testIcon = document.createElement('i');
         testIcon.className = 'fas fa-home';
@@ -153,6 +300,17 @@
         }
       }, 500);
     });
+    
+    // Add shake animation for wrong password
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
